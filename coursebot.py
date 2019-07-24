@@ -1,7 +1,16 @@
 #! /bin/python
+
 import discord
 from discord.ext import commands
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 import random
+
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name('coursebot_credentials.json', scope)
+client = gspread.authorize(creds)
+
+sheet = client.open('Smash Erie Mario Maker Courses').sheet1
 
 description = '''A bot used to manage a Google Sheets spreadsheet of Super Mario
 Maker 2 levels.'''
@@ -15,31 +24,38 @@ async def on_ready():
     print('------')
 
 @bot.command()
-async def addcourse(ctx, *, course: str):
+async def cbhelp(ctx):
+    await ctx.send('Placeholder help text')
+
+@bot.command()
+async def cbadd(ctx, *, course: str):
     metadata = course.split('\n')
     for data in metadata:
         data.lstrip()
-    print(metadata)
-    title = metadata[0]
-    courseID = metadata[1].upper()
-    description = metadata[2]
-    difficulty = metadata[3]
-    creator = metadata[4]
-    if len(courseID) != 11:
+    metadata[1] = metadata[1].upper()
+    if len(metadata[1]) != 11:
         addedMessage = 'Invalid course ID length, not added.'
     else:
-        addedMessage = 'Course ' + courseID + ' added!'
+        if len(metadata) != 5:
+            addedMessage = 'Invalid number of metadata fields!'
+        else:
+            sheet.insert_row(metadata, 2)
+            print('Adding ' + metadata[1] + ' to spreadsheet')
+            addedMessage = 'Course ' + metadata[1] + ' added!'
     await ctx.send(addedMessage)
 
 @bot.command()
-async def removecourse(ctx, *, courseID: str):
+@commands.has_role('Mod Squad')
+@commands.has_role('Admin')
+async def cbremove(ctx, courseID: str):
     # Make sure course ID is 11 characters long
     courseID = courseID.upper()
+    print('Removing ' + courseID + ' from spreadsheet')
     removedMessage = 'Course ' + courseID + ' removed!'
     await ctx.send(removedMessage)
 
 @bot.command()
-async def randomcourse(ctx):
+async def cbrandom(ctx):
     await ctx.send('PL4-C3H-LDR')
 
 bot.run('TOKEN')
