@@ -48,14 +48,26 @@ async def cbadd(ctx, *, course: str):
 @commands.has_role('Mod Squad')
 @commands.has_role('Admin')
 async def cbremove(ctx, courseID: str):
-    # Make sure course ID is 11 characters long
     courseID = courseID.upper()
-    print('Removing ' + courseID + ' from spreadsheet')
-    removedMessage = 'Course ' + courseID + ' removed!'
+    if len(courseID) != 11:
+        removedMessage = 'Invalid course ID length, could not remove.'
+    else:
+        try:
+            cell = sheet.find(courseID)
+            print('Course found at row ' + str(cell.row))
+            print('Removing ' + courseID + ' from spreadsheet')
+            sheet.delete_row(cell.row)
+            removedMessage = 'Course ' + courseID + ' removed!'
+        except gspread.exceptions.CellNotFound:
+            removedMessage = 'Could not remove ' + courseID + ', course not found!'
     await ctx.send(removedMessage)
 
 @bot.command()
 async def cbrandom(ctx):
     await ctx.send('PL4-C3H-LDR')
+
+@bot.command()
+async def cblink(ctx):
+    await ctx.send('SPREADLINK')
 
 bot.run('TOKEN')
