@@ -18,11 +18,13 @@ Before running this bot you must have the ![discord.py](https://github.com/Rappt
 
 * !cbrandom - Prints a random course ID from the spreadsheet
 
+* !cblink - Prints the link to the spreadsheet
+
 ## Deploying this Discord Bot
 
 * Create a new app: https://discordapp.com/developers/applications/
 
-* In the coursebot.py file replace TOKEN with your app's token.
+* In the `coursebot.py` file replace TOKEN with your app's token.
 
 * Replace CLIENTID with your app's client ID in this URL and follow it: https://discordapp.com/oauth2/authorize?client_id=CLIENTID&scope=bot
 

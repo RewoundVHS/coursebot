@@ -25,7 +25,7 @@ async def on_ready():
 
 @bot.command()
 async def cbhelp(ctx):
-    await ctx.send('Placeholder help text')
+    await ctx.send('`!cbadd` - Add a course to the spreadsheet in the following format: Title, Course ID, Description, Difficulty, Creator\n`!cbremove` - Remove a course corresponding to given ID from the spreadsheet\n`!cbrandom` - Prints a random course ID from the spreadsheet\n`!cblink` - Prints the link to the spreadsheet')
 
 @bot.command()
 async def cbadd(ctx, *, course: str):
@@ -45,10 +45,9 @@ async def cbadd(ctx, *, course: str):
     await ctx.send(addedMessage)
 
 @bot.command()
-@commands.has_role('Mod Squad')
-@commands.has_role('Admin')
+@commands.has_any_role('Mod Squad', 'Admin', 'Staff')
 async def cbremove(ctx, courseID: str):
-    courseID = courseID.upper()
+    courseID = courseID.upper().lstrip()
     if len(courseID) != 11:
         removedMessage = 'Invalid course ID length, could not remove.'
     else:
@@ -64,7 +63,9 @@ async def cbremove(ctx, courseID: str):
 
 @bot.command()
 async def cbrandom(ctx):
-    await ctx.send('PL4-C3H-LDR')
+    print('Selecting random course ID')
+    randID = sheet.cell(random.randint(2,sheet.row_count), 2).value
+    await ctx.send(randID)
 
 @bot.command()
 async def cblink(ctx):
