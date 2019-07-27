@@ -4,9 +4,9 @@
 
 ## Dependencies
 
-Before running this bot you must have the ![discord.py](https://github.com/Rapptz/discord.py) package installed as well as gspread and ouath2client.
+Before running this bot you must have the ![discord.py](https://github.com/Rapptz/discord.py) package installed as well as gspread and oauth2client.
 
-`python3 -m pip install -U discord.py gspread ouauth2client`
+`python3 -m pip install -U discord.py gspread oauth2client`
 
 ## Commands
 
