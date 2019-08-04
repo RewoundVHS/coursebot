@@ -1,20 +1,21 @@
-#! /bin/python
+#! /usr/bin/python3
 
 import discord
 from discord.ext import commands
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import random
+import os
 
 # Open spreadsheet using coursebot_credentials.json
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('coursebot_credentials.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name(os.getcwd() + '/coursebot_credentials.json', scope)
 client = gspread.authorize(creds)
 sheet = client.open('Smash Erie Mario Maker Courses').sheet1
 
 description = '''A bot used to manage a Google Sheets spreadsheet of Super Mario
 Maker 2 levels.'''
-bot = commands.Bot(command_prefix='!', description=description)
+bot = commands.Bot(command_prefix='!')
 
 # Print bot information
 @bot.event
@@ -23,7 +24,8 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await client.change_presence(game=discord.Game(name='!cbhelp for command list'))
+    game = discord.Game('!cbhelp for command list')
+    await bot.change_presence(activity=game)
 
 # Help command, prints list of commands
 @bot.command()
