@@ -25,7 +25,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
     game = discord.Game('!cbhelp for command list')
-    await bot.change_presence(activity=game)
+    await bot.change_presence(status=discord.Status.online, activity=game)
 
 # Help command, prints list of commands
 @bot.command()
